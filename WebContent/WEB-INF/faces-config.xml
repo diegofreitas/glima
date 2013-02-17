@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+	version="1.2">
+
+	<!-- Configuracoes do sistema -->
+	<converter>
+		<converter-id>object.converter</converter-id>
+		<converter-class>br.com.sistemaweb.utils.DomainObjectConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<display-name>EnumConverter</display-name>
+		<converter-id>enumConverter</converter-id>
+		<converter-class>
+               br.com.sistemaweb.utils.EnumConverter
+        </converter-class>
+	</converter>
+	
+	<application>
+		<message-bundle>message</message-bundle>
+		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
+		
+	</application>
+	
+	<managed-bean>
+		<managed-bean-name>comboHelper</managed-bean-name>
+		<managed-bean-class>br.com.sistemaweb.UICollectionHelper</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>context</managed-bean-name>
+		<managed-bean-class>br.com.sistemaweb.ApplicationContext</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+
+	<!-- Fim das Configuracoes do sistema -->
+
+	
+	<managed-bean>
+		<managed-bean-name>pessoaReportModel</managed-bean-name>
+		<managed-bean-class>br.com.sistemaweb.model.PessoaReportModel</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+		
+	<managed-bean>
+		<managed-bean-name>tabela</managed-bean-name>
+		<managed-bean-class>br.com.sistemaweb.teste.TabelaController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>buscaPessoaPick</managed-bean-name>
+		<managed-bean-class>br.com.sistemaweb.model.BuscaPessoasTabelaModel</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<managed-bean>
+		<managed-bean-name>pessoaCrudBean</managed-bean-name>
+		<managed-bean-class>
+			br.com.sistemaweb.teste.PessoaCrud
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>profissaoCrudBean</managed-bean-name>
+		<managed-bean-class>
+			br.com.sistemaweb.teste.ProfissaoCrud
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>categoriaCrud</managed-bean-name>
+		<managed-bean-class>
+			br.com.sistemaweb.model.CategoriaCrud
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fornecedorCrud</managed-bean-name>
+		<managed-bean-class>
+			br.com.sistemaweb.model.FornecedorCrud
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<managed-bean>
+		<managed-bean-name>produtoCrud</managed-bean-name>
+		<managed-bean-class>
+			br.com.sistemaweb.model.ProdutoCrud
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>entradaCrud</managed-bean-name>
+		<managed-bean-class>
+			br.com.sistemaweb.model.MovimentacaoEstoqueCrud
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+</faces-config>

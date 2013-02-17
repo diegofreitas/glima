@@ -1,0 +1,221 @@
+@CHARSET "UTF-8";
+
+* {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.statusStart{
+	background: yellow; 
+	border: 1px solid white ; 
+	color: gray; 
+	font-size: 10pt;
+	font-weight: bold; 
+	padding: 2px;
+	position:fixed;
+	bottom: 0px;
+	left: 0px;
+	z-index:10000;
+}
+
+
+
+
+A{
+	text-decoration: none;	
+	color: black;
+}
+
+a:VISITED{
+		color: black;
+	}
+
+img{
+	border: none;
+}
+
+BODY{
+		background-color: gray;
+		margin: 0px;
+	}
+
+
+	
+INPUT {
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+LABEL {
+	text-transform: capitalize;
+	font-weight: bold;
+}
+
+.spacer{
+		padding: 3px;
+	}
+
+.center{
+		float: none;/* Fazer cerntrlizado para botoes de ação*/ 
+	}
+	
+.label-column {
+	background-color: #ECF3FE;
+	text-align: right;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+.field-column {
+	padding-left: 5px;
+}
+
+.table-row1 {
+	
+}
+
+.table-row2 {
+	background-color: #ECF3FE;
+}
+
+.error{
+	color:red;	
+	font-weight: bold;
+}
+
+.info{
+	color:blue;	
+	font-weight: bold;
+	}
+
+.warn{
+	color:red;	
+	font-weight: bold;
+	}
+
+/*Definição do layout da pagina##############################################################*/
+.main{
+	width: 80%;
+	margin-left: 10%;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: #eef2f8;
+	
+}
+
+.menu {
+	float: left;
+	width: 15%;
+	vertical-align: middle;
+	
+}
+
+.body{
+	float: right;
+	width: 85%;
+	
+}
+
+.mainForm {
+	min-height:450px ;
+}
+
+.header {
+	background: url("img/header.png");
+	height: 51px;
+}
+
+.footer-right {
+	float: right;
+	/*border: 1px solid blue;*/
+	margin-top: 5px;
+	margin-right: 5px;
+	
+	
+}
+
+.footer-left {
+	float: left;
+	/*border: 1px solid blue;*/
+	margin-top: 5px;
+	margin-left: 5px;
+}
+
+.footer {
+	background: url("img/header.png");
+	height: 30px;
+	clear: both;
+}
+
+.user {
+	float: right;
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+.title {
+	float: left;
+	margin-top: 10px;
+	margin-left: 5px;
+	font-size: xx-large;
+	font-style: italic;
+	letter-spacing: 6px;
+	text-shadow: black;
+}
+
+.content {
+	min-height: 300px;
+}
+
+/*Customizacao dos componentes do RichFaces*/
+.rich-tool-tip {
+	background-color: #eef2f8;
+	border-color: #7196c8;
+}
+
+.rich-button {
+	padding-bottom: 15px;
+}
+
+.rich-button LABEL{
+	padding-bottom:15px;
+	padding-left:32px;
+	padding-top:3px;
+	cursor: pointer;
+}
+
+.btnAdicionar{
+	background: url(img/32/add.png) no-repeat top left ;
+}
+
+.btnPesquisar{
+	background: url(img/32/find.png) no-repeat top left;
+}
+
+.btnPesquisar{
+	background: url(img/32/find.png) no-repeat top left;
+}
+
+.btnSalvar{
+	background: url(img/32/disk_blue.png) no-repeat top left;
+}
+
+.btnSalvarManter{
+	background: url(img/32/disk_blue_window.png) no-repeat top left;
+}
+
+.btnSalvarAdicionar{
+	background: url(img/32/disk_blue_add.png) no-repeat top left;
+}
+
+.btnVoltar{
+	background: url(img/32/nav_left_blue.png) no-repeat top left;
+}
+
+.btnSalvaSeleciona{
+	background: url(img/32/disk_blue_ok.png) no-repeat top left;
+}
+
+/* campos especificos*/
+
+
+

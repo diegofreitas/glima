@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<head>
+<style type="text/css">
+	@IMPORT url("#{facesContext.externalContext.request.contextPath}/css/style.css");
+</style>
+
+</head>
+<body>
+<ui:composition>
+
+
+	<!--####################################################################################################################
+			########################################################################################################################
+			#########################################################################################################################  -->
+
+
+	<t:saveState value="#{entradaCrud}" />
+	<ui:param name="defaultBean" value="#{entradaCrud}" />
+	<ui:param name="naming" value="compra" />
+	
+	
+	
+	<!--####################################################################################################################  -->
+<f:loadBundle basename="message" var="m" />
+	
+	
+	<a4j:form id="#{naming}MainForm">
+	 	
+		<!--### Mensagens -->
+		<ui:include src="../facelets/messages.xhtml"/>
+		<!--### -->
+		
+		<!--### bloco de pesquisa -->
+		<rich:panel id="#{naming}SearchlistBlock" rendered="#{entradaCrud.pesquisarState}" styleClass="mainForm">
+			<f:facet name="header">
+				#{m.tituloListagem} #{naming}
+			 </f:facet>
+			
+			
+			<br/>
+			<h:panelGrid columns="2">
+					<a4j:commandLink styleClass="rich-button"
+						action="#{entradaCrud.prepareAdicionar}" immediate="true"
+						reRender="#{naming}MainForm" >
+						<h:outputLabel  value="#{m.adicionar}" styleClass="btnAdicionar"/>
+						</a4j:commandLink>
+			</h:panelGrid>
+			<br/>
+			
+			<!--### -->
+			<br/>
+			<!--### Tabela para os resultados -->
+			<rich:dataTable width="483" id="userList" rows="10" rowClasses="table-row1,table-row2" value="#{entradaCrud.entities}" var="row">
+				<!--### Cabecalho-->
+				<f:facet name="header">
+					<rich:columnGroup>
+						<h:column>
+							#{m.produto}
+						</h:column>
+						
+						<h:column>
+							#{m.acoesListagem}
+						</h:column>
+					</rich:columnGroup>
+				</f:facet>
+				<!--### -->
+				
+				<!--### Linhas com os dados -->
+				<h:column>
+					<h:outputText value="#{row.produto}" />
+				</h:column>
+				
+			<!--###################################################################################################################  -->
+				<!--### -->
+				
+				<!--### Coluna com os comandos-->
+				<h:column>
+					<center>
+					<a4j:commandLink action="#{entradaCrud.prepareEditar}" immediate="true"
+						rendered="#{relation==null}" reRender="#{naming}MainForm">
+						<f:setPropertyActionListener value="#{row}"
+							target="#{entradaCrud.entity}" />
+						<h:graphicImage value="/css/img/16/edit.png"/>
+					</a4j:commandLink> 
+					<span class="spacer">
+					</span>  
+					<a4j:commandLink action="#{entradaCrud.excluir}" immediate="true"
+						rendered="#{relation==null}" reRender="#{naming}MainForm">
+						<f:setPropertyActionListener value="#{row}"
+							target="#{entradaCrud.entity}" />
+						<h:graphicImage value="/css/img/16/delete.png"/>
+					</a4j:commandLink> 
+					<span class="spacer">
+					</span> 
+					<a4j:commandLink immediate="true"
+								rendered="#{relation!=null}"
+								oncomplete="Richfaces.hideModalPanel('#{naming}ModalPanel')">
+								<f:setPropertyActionListener value="#{row}" target="#{relation.entity.movimentacaoEstoque}" />
+								<h:graphicImage value="/css/img/16/check.png"/>
+					</a4j:commandLink> 
+					
+					</center>
+				</h:column>
+				<!--### -->
+				<f:facet name="footer">
+					<rich:datascroller/>
+				</f:facet>
+			</rich:dataTable>
+			<!--### -->
+			
+		</rich:panel>
+		<!--### -->
+		
+		<!--### Bloco de Edição -->
+		<rich:panel id="#{naming}AddUpdateBlock" rendered="#{entradaCrud.adicionarState or entradaCrud.editarState}" styleClass="mainForm">
+			<f:facet name="header">
+				#{m.tituloCadastro } #{naming}
+			</f:facet>
+			
+			<!--### Inicio da declaração dos campos do formulário -->
+			<h:panelGrid columns="2" id="panel2" binding="#{entradaCrud.panelForm}" columnClasses="label-column,field-column">
+			
+					<h:outputText value="produto" />
+					<h:column>
+						<rich:comboBox value="#{entradaCrud.entity.produto}"  suggestionValues="#{comboHelper.produtos}" converter="object.converter">
+							<a4j:support event="onselect" reRender="#{naming}AddUpdateBlock"/>
+						</rich:comboBox>   
+					</h:column>
+					
+					<h:outputLabel value="Quantidade"/>
+					<h:column>
+						<h:inputText value="#{entradaCrud.entity.entrada}" size="8" redisplay="true" id="entrada"/>
+							<br/>
+						<h:message for="entrada" styleClass="error"/>
+					</h:column>
+				
+				
+				
+				
+					
+					
+				
+			</h:panelGrid>
+			<!--### -->
+			<br/>
+			<!--### Declaração do comandos da tela de adicionar e editar objeto -->
+			<h:panelGrid id="commandos" columns="4">
+				<a4j:commandLink styleClass="rich-button"  id="salvar" action="#{entradaCrud.saveAndReturn}" 
+					rendered="#{relation==null}" reRender="#{naming}MainForm" >
+					<h:outputLabel  value="#{m.salvar}" styleClass="btnSalvar"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="salvarManter" action="#{entradaCrud.saveAndKeep}" 
+					rendered="#{relation==null}" reRender="#{naming}MainForm" >
+					<h:outputLabel  value="#{m.salvarManter}" styleClass="btnSalvarManter"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="salvarAdicionar" action="#{entradaCrud.saveAndAdd}" 
+					rendered="#{relation==null}" reRender="#{naming}MainForm" >
+					<h:outputLabel  value="#{m.salvarAdicionar}" styleClass="btnSalvarAdicionar"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="salvarSelecionar"
+					oncomplete="if ('#{facesContext.maximumSeverity.ordinal}' == '0'){Richfaces.hideModalPanel('#{naming}ModalPanel');}"
+					action="#{entradaCrud.saveAndSelect}" rendered="#{relation!=null}" reRender="#{naming}MainForm">
+					<f:setPropertyActionListener value="#{entradaCrud.entity}" target="#{relation.entity.categoria}" />
+					<h:outputLabel  value="#{m.salvarSelecionar}" styleClass="btnSalvaSeleciona"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="voltar" action="#{entradaCrud.voltar}" immediate="true" reRender="#{naming}MainForm">
+					<h:outputLabel  value="#{m.voltar}" styleClass="btnVoltar"/>
+				</a4j:commandLink>
+				
+			</h:panelGrid>
+			<br/>
+			<!--### -->
+			
+		</rich:panel>
+		
+	</a4j:form>
+	
+</ui:composition>
+
+</body>
+</html>

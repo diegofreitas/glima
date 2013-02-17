@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory name="_session_factory@e3ekd899">
+ 
+  <!--  property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+  <property name="hibernate.connection.datasource">java:comp/env/jdbc/mysql</property>
+  <property name="hibernate.hbm2ddl.auto">update</property>
+  <property name="hibernate.show_sql">true</property>
+  <property name="hibernate.format_sql">true</property-->
+  
+  <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+  <property name="hibernate.connection.datasource">java:comp/env/jdbc/postgres</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+  <property name="hibernate.hbm2ddl.auto">update</property>
+  <property name="hibernate.show_sql">true</property>
+  <property name="hibernate.format_sql">true</property>
+  
+  <mapping class="br.com.sistemaweb.domain.Empresa"/>
+  <mapping class="br.com.sistemaweb.domain.Permissao"/>
+  <mapping class="br.com.sistemaweb.domain.Categoria"/>
+  <mapping class="br.com.sistemaweb.domain.Fornecedor"/>
+  <mapping class="br.com.sistemaweb.domain.Produto"/>
+  <mapping class="br.com.sistemaweb.domain.MovimentacaoEstoque"/>
+
+
+
+  
+ </session-factory>
+</hibernate-configuration>

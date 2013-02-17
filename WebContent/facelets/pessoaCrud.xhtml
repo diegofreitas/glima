@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<head>
+<style type="text/css">
+	@IMPORT url("#{facesContext.externalContext.request.contextPath}/css/style.css");
+</style>
+
+</head>
+<body>
+<ui:composition>
+	<t:saveState value="#{pessoaCrudBean}" />
+	<ui:param name="defaultBean" value="#{pessoaCrudBean}" />
+	<ui:param name="naming" value="pessoa" />
+
+	<f:loadBundle basename="message" var="m" />
+	
+	<a4j:form id="#{naming}MainForm">
+	 	
+		<!--### Mensagens -->
+		<ui:include src="messages.xhtml"/>
+		<!--### -->
+		
+		<!--### bloco de pesquisa -->
+		<rich:panel id="#{naming}SearchlistBlock" rendered="#{defaultBean.pesquisarState}">
+			<f:facet name="header">
+				#{m.tituloListagem} #{naming}
+			 </f:facet>
+			
+			<!--### Campos de pesquisa --> 
+			<h:panelGrid columns="2" columnClasses="label-column ,field-column">
+				<h:outputLabel value="nome" />
+				<h:column>
+					<h:inputText styleClass="rich-input-text" value="#{defaultBean.specification.nome}" size="30" required="true"/>					
+				</h:column>
+			</h:panelGrid>
+			<br/>
+			<h:panelGrid columns="2">
+					<a4j:commandLink styleClass="rich-button"
+						action="#{defaultBean.pesquisar}" reRender="#{naming}MainForm" >											
+						<h:outputLabel  value="#{m.pesquisar}" styleClass="btnPesquisar"/>
+					</a4j:commandLink>
+					<a4j:commandLink styleClass="rich-button"
+						action="#{defaultBean.prepareAdicionar}" immediate="true"
+						reRender="#{naming}MainForm" >
+						<h:outputLabel  value="#{m.adicionar}" styleClass="btnAdicionar"/>
+						</a4j:commandLink>
+			</h:panelGrid>
+			<br/>
+			
+			<!--### -->
+			<br/>
+			<!--### Controle da tabela -->
+			
+			<rich:spacer width="1" height="5" />
+			<rich:datascroller align="left" for="userList" maxPages="10" />
+			<rich:spacer height="30" />
+			<!--### -->
+			<!--### Tabela para os resultados -->
+			<rich:dataTable width="483" id="userList" rows="10" rowClasses="table-row1,table-row2" value="#{defaultBean.entities}" var="row">
+				<!--### Cabecalho-->
+				<f:facet name="header">
+					<rich:columnGroup>
+						<h:column>
+							#{m.nome}
+						</h:column>
+						<h:column>
+							#{m.endereco}
+						</h:column>
+						<h:column>
+							#{m.telefone}
+						</h:column>
+						<h:column>
+							#{m.acoesListagem}
+						</h:column>
+					</rich:columnGroup>
+				</f:facet>
+				<!--### -->
+				
+				<!--### Linhas com os dados -->
+				<h:column>
+					<h:outputText value="#{row.nome}" />
+				</h:column>
+				<h:column>
+					<h:outputText value="#{row.endereco}" />
+				</h:column>
+				<h:column>
+					<h:outputText value="#{row.telefone}" />
+				</h:column>
+				<!--### -->
+				
+				<!--### Coluna com os comandos-->
+				<h:column>
+					<span> <a4j:commandLink action="#{defaultBean.prepareEditar}" immediate="true"
+						rendered="#{relation==null}" reRender="#{naming}MainForm">
+						<f:setPropertyActionListener value="#{row}"
+							target="#{defaultBean.entity}" />
+						<h:graphicImage value="/css/img/16/edit.png"/>
+					</a4j:commandLink> 
+					<span class="spacer">
+					</span>  
+					<a4j:commandLink action="#{defaultBean.excluir}" immediate="true"
+						rendered="#{relation==null}" reRender="#{naming}MainForm">
+						<f:setPropertyActionListener value="#{row}"
+							target="#{defaultBean.entity}" />
+						<h:graphicImage value="/css/img/16/delete.png"/>
+					</a4j:commandLink> 
+					<span class="spacer">
+					</span> 
+					<a4j:commandLink immediate="true"
+								rendered="#{relation!=null}"
+								oncomplete="Richfaces.hideModalPanel('#{naming}ModalPanel')">
+								<f:setPropertyActionListener value="#{row}" target="#{relation.profissao}" />
+								<h:graphicImage value="/css/img/16/check.png"/>
+					</a4j:commandLink> </span>
+				</h:column>
+				<!--### -->
+				
+			</rich:dataTable>
+			<!--### -->
+			
+		</rich:panel>
+		<!--### -->
+		
+		<!--### Bloco de Edição -->
+		<rich:panel id="#{naming}AddUpdateBlock" rendered="#{defaultBean.adicionarState or defaultBean.editarState}">
+			<f:facet name="header">
+				#{m.tituloCadastro } #{naming}
+			</f:facet>
+			
+			<!--### Inicio da declaração dos campos do formulário -->
+			<h:panelGrid columns="2" id="panel2" binding="#{defaultBean.panelForm}" columnClasses="label-column,field-column">
+				<h:outputLabel value="nome" />
+				<h:column>
+					<h:inputText styleClass="rich-input-text" value="#{defaultBean.entity.nome}" size="30"
+						required="true" id="nome" />
+					<br />
+					<h:message for="nome" styleClass="error" />
+				</h:column>
+
+				<h:outputLabel value="endereco: " />
+				<h:column>
+					<h:inputText styleClass="rich-input-text" value="#{defaultBean.entity.endereco}" size="30" id="endereco" />
+					<br />
+					<h:message for="endereco" styleClass="error" />
+				</h:column>
+
+				<h:outputLabel value="telefone: " />
+				<h:column>
+					<h:inputText styleClass="rich-input-text" value="#{defaultBean.entity.telefone}" size="12" required="true" id="telefone" />
+					<br />
+					<h:message for="telefone" styleClass="error" />
+				</h:column>
+
+				<h:outputLabel value="profissao" />
+				<h:column>
+					<a4j:outputPanel ajaxRendered="true">
+						<h:panelGrid id="inputProfissao" columns="3">
+							<h:inputText styleClass="rich-input-text" readonly="true" id="profissao" value="#{defaultBean.entity.profissao }" converter="object.converter" />
+							<a4j:commandLink immediate="true" onclick="Richfaces.showModalPanel('profissoes')">
+								<h:graphicImage value="/css/img/16/add.png"/>
+							</a4j:commandLink>
+							<a4j:commandLink immediate="true">
+								<f:setPropertyActionListener value="#{null}" target="#{defaultBean.entity.profissao}" />
+								<h:graphicImage value="/css/img/16/delete.png"/>
+							</a4j:commandLink>
+						</h:panelGrid>
+						<br />
+						<h:message for="profissao" styleClass="error" />
+					</a4j:outputPanel>
+				</h:column>
+
+				<h:outputLabel value="Nascimento:" />
+				<h:column>
+					<rich:calendar value="#{defaultBean.entity.nascimento}"
+						required="true" id="nascimento" />
+					<br />
+					<h:message for="nascimento" styleClass="error" />
+				</h:column>
+
+				<h:outputLabel value="Status" />
+				<h:column>
+					<h:selectOneMenu id="status" value="#{defaultBean.entity.status}">
+						<f:selectItems value="#{comboHelper.statusCollection}" />
+					</h:selectOneMenu>
+					<br />
+					<h:message for="status" styleClass="error" />
+				</h:column>
+
+				<h:outputLabel value="Currículo" />
+				<h:column>
+					<!-- t:inputHtml styleClass="rich-input-text" id="comentario" value="#{defaultBean.entity.comentario}" /-->
+					<br />
+					<h:message for="comentario" styleClass="error" />
+				</h:column>
+				
+				<h:outputLabel value="pessoas" />
+ 				<h:column>
+ 					<a4j:outputPanel ajaxRendered="true">
+ 					<h:inputText size="30" readonly="true" id="pessoas" styleClass="rich-input" value="#{empty tabela.pessoas ? 'Nenhuma pessoa Selecionada' : tabela.totalPessoas} #{empty tabela.pessoas ? '' :' Pessoas Selecionadas'}" onclick="Richfaces.showModalPanel('painelBuscaPessoas')" >
+ 						<rich:toolTip for="pessoas" followMouse="true" value="#{empty tabela.pessoas ? 'Clique aqui para selecionar as pessoas' : tabela.pessoas}"/>
+ 					</h:inputText>
+ 					<br/>
+ 					<h:message for="pessoas" styleClass="error" />
+ 					</a4j:outputPanel>
+ 				</h:column>
+			</h:panelGrid>
+			<!--### -->
+			<br/>
+			<!--### Declaração do comandos da tela de adicionar e editar objeto -->
+			<h:panelGrid id="commandos" columns="3">
+				<a4j:commandLink styleClass="rich-button"  id="salvar" action="#{defaultBean.saveAndReturn}" 
+					rendered="#{relation==null}" reRender="#{naming}MainForm" >
+					<h:outputLabel  value="#{m.salvar}" styleClass="btnSalvar"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="salvarManter" action="#{defaultBean.saveAndKeep}" 
+					rendered="#{relation==null}" reRender="#{naming}MainForm" >
+					<h:outputLabel  value="#{m.salvarManter}" styleClass="btnSalvarManter"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="salvarSelecionar"
+					oncomplete="if ('#{facesContext.maximumSeverity.ordinal}' == '0'){Richfaces.hideModalPanel('#{naming}ModalPanel');}"
+					action="#{defaultBean.saveAndSelect}" rendered="#{relation!=null}">
+					<f:setPropertyActionListener value="#{defaultBean.entity}" target="#{relation.pessoa}" />
+					<h:outputLabel  value="#{m.salvarSelecionar}" styleClass="btnSelecionar"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="voltar" action="#{defaultBean.voltar}" immediate="true" reRender="#{naming}MainForm">
+					<h:outputLabel  value="#{m.voltar}" styleClass="btnVoltar"/>
+				</a4j:commandLink>
+				
+			</h:panelGrid>
+			<br/>
+			<!--### -->
+			
+		</rich:panel>
+		
+	</a4j:form>
+
+	<!--### Declaração das janelas de consulta para os relacionamentos -->
+	<rich:modalPanel id="profissoes" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="#{m.tituloProfissaoModalPanel}" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:graphicImage value="/css/img/16/delete2.png" style="cursor:pointer" onclick="Richfaces.hideModalPanel('profissoes')" />
+		</f:facet>
+			<ui:include src="profissaoCrud.xhtml">
+				<ui:param name="relation" value="#{defaultBean}" />
+			</ui:include>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="painelBuscaPessoas" autosized="true">
+	<f:facet name="header">
+    	Seleciona varios itens
+	</f:facet>
+	<f:facet name="controls">
+        	<h:graphicImage value="/css/img/16/delete2.png" style="cursor:pointer" onclick="Richfaces.hideModalPanel('painelBuscaPessoas')" />
+    </f:facet>
+		<a4j:form>
+			<h:panelGrid columns="2">
+				<h:outputText value="Nome:" />
+				<h:inputText id="nomeExample" styleClass="rich-input" value="#{buscaPessoaPick.specification.nome}" />
+				<a4j:commandButton reRender="dados" styleClass="rich-button" value="Pesquisar" actionListener="#{buscaPessoaPick.search}"/>
+				<f:verbatim/>
+			</h:panelGrid>
+			<br/>
+			<h:panelGrid  id="dados">
+				<rich:pickList value="#{tabela.pessoas}" converter="object.converter">
+					<f:selectItems value="#{buscaPessoaPick.list}"/>
+				</rich:pickList>
+			</h:panelGrid>
+			 <a4j:commandButton styleClass="rich-button" value="Comfirmar" oncomplete="Richfaces.hideModalPanel('painelBuscaPessoas')" />
+		</a4j:form>		
+</rich:modalPanel>	
+	
+	<!--###-->
+	
+
+	
+</ui:composition>
+
+</body>
+</html>

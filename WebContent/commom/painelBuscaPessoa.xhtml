@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:ui="http://java.sun.com/jsf/facelets"
+			xmlns:h="http://java.sun.com/jsf/html"
+			xmlns:f="http://java.sun.com/jsf/core"
+			xmlns:r="http://richfaces.org/rich"
+			xmlns:aj="http://richfaces.org/a4j">
+<body>
+<ui:composition>
+<f:loadBundle basename="message" var="m"/>
+	<r:modalPanel id="mp" autosized="true">
+    	<f:facet name="header">
+        	<h:outputText value="Busca de Pessoas" />
+    	</f:facet>
+    	<f:facet name="controls">
+        	<h:outputText value="X" style="cursor:pointer;font-style:bold" onclick="Richfaces.hideModalPanel('mp')" />
+    	</f:facet>
+    	<aj:form>
+			<h:panelGrid columns="2">
+				#{m.nome}
+				<h:inputText id="nomeExample" styleClass="rich-input" value="#{buscaPessoa.specification.nome}" />
+				<aj:commandButton styleClass="rich-button" reRender="tabelaDados" value="Pesquisar" actionListener="#{buscaPessoa.search}"/>
+				</h:panelGrid>
+				<br/>
+				<h:panelGrid>
+				<r:datascroller for="tabelaDados" maxPages="5" />
+				<r:dataTable value="#{buscaPessoa.list}" id="tabelaDados" rows="5" width="100%" var="cc" rendered="#{not empty buscaPessoa.list}">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Acoes" />
+						</f:facet>
+						<aj:commandLink reRender="campoRelacao"  actionListener="#{pessoaCrudBean.setRelacao}" oncomplete="Richfaces.hideModalPanel('mp')">
+							<h:outputText value="Selecionar" />
+							<f:param name="entity" value="#{cc.id}" />
+						</aj:commandLink>
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="ID" />
+						</f:facet>
+						<h:outputText value="#{cc.id}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Nome" />
+						</f:facet>
+						<h:outputText value="#{cc.nome}" />
+					</h:column>					
+				</r:dataTable>
+			</h:panelGrid>	
+		</aj:form>
+	</r:modalPanel>
+</ui:composition>
+</body>
+</html>

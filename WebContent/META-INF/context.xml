@@ -1,0 +1,22 @@
+<Context path="/glima">
+	<Resource name="jdbc/postgres" auth="Container" driverClassName="org.postgresql.Driver"
+		maxActive="20" maxIdle="10" maxWait="-1"  type="javax.sql.DataSource"
+		url="jdbc:postgresql://localhost:5432/sistema" username="postgres"
+		password="postgres" />
+		
+	<Realm className="org.apache.catalina.realm.DataSourceRealm"
+		debug="99" dataSourceName="jdbc/postgres" localDataSource="true"
+		userTable="usuario_auth" userNameCol="login" userCredCol="senha"
+		userRoleTable="permissao_auth" roleNameCol="permissao" />
+		
+		<!--Resource name="jdbc/mysql" auth="Container" driverClassName="com.mysql.jdbc.Driver"
+		maxActive="20" maxIdle="10" maxWait="-1"  type="javax.sql.DataSource"
+		url="jdbc:mysql://localhost/sistema" username="root"
+		password="" />
+		
+	<Realm className="org.apache.catalina.realm.DataSourceRealm"
+		debug="99" dataSourceName="jdbc/mysql" localDataSource="true"
+		userTable="usuario_auth" userNameCol="login" userCredCol="senha"
+		userRoleTable="permissao_auth" roleNameCol="permissao" /-->
+
+</Context>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:t="http://myfaces.apache.org/tomahawk"
+		xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<style type="text/css">
+		@IMPORT url("#{facesContext.externalContext.request.contextPath}/css/style.css");
+	</style>
+</head>	 
+<body>
+	<ui:composition template="facelets/template.xhtml">
+		<ui:define name="body">
+		<t:saveState value="#{pessoaReportModel}" />
+	<ui:param name="defaultBean" value="#{pessoaReportModel}" />
+	<ui:param name="naming" value="pessoa" />
+
+	<f:loadBundle basename="message" var="m" />
+	
+	<h:form id="#{naming}MainForm">
+	 	<!-- a4j:status styleClass="">
+    		<f:facet name="start">
+        		<h:graphicImage value="/css/img/status.png" />
+    		</f:facet>
+		</a4j:status-->
+		<!--### Mensagens -->
+			<h:messages layout="table" tooltip="true" rendered="#{(facesContext.maximumSeverity.ordinal != 2) and (facesContext.maximumSeverity.ordinal != null)}"
+				showdetail="true" showsummary="true" errorClass="error"
+				infoStyle="info"/>		
+		<!--### -->
+		
+		<!--### bloco de pesquisa -->
+		<rich:panel>
+			<f:facet name="header">
+				Pesquisar
+			 </f:facet>
+			<rich:panel>
+			<!--### Campos de pesquisa --> 
+			<h:panelGrid columns="2" columnClasses="odd-row,even-row">
+				<h:outputLabel value="nome" />
+				<h:column>
+					<h:inputText id="nome" styleClass="rich-input-text" value="#{defaultBean.specification.nome}" size="30"/>
+					<br/>
+					<h:message for="nome" styleClass="error" />					
+				</h:column>
+				
+				<h:outputLabel value="endereco" />
+				<h:column>
+					<h:inputText id="endereco" styleClass="rich-input-text" value="#{defaultBean.specification.endereco}" />
+				</h:column>
+				
+			</h:panelGrid>
+			
+			<h:panelGrid columns="3">
+					<h:commandButton styleClass="rich-button" value="Pesquisar" actionListener="#{defaultBean.search}" />	
+					
+			<h:commandButton rendered="false" styleClass="rich-button" value="PDF" actionListener="#{defaultBean.export}" >
+				<f:param name="type" value="#{comboHelper.exportTypes[0]}"/>
+			</h:commandButton>
+			<h:commandButton styleClass="rich-button" value="XLS" actionListener="#{defaultBean.export}" >
+				<f:param name="type" value="#{comboHelper.exportTypes[1]}"/>
+			</h:commandButton>
+			<h:commandButton styleClass="rich-button" value="RTF" actionListener="#{defaultBean.export}" >
+				<f:param name="type" value="#{comboHelper.exportTypes[2]}"/>
+			</h:commandButton>
+			</h:panelGrid>
+			
+			</rich:panel>
+		</rich:panel>
+		
+		
+			
+		<rich:modalPanel id="report" showWhenRendered="true" width="1200" height="550" rendered="#{not empty defaultBean.list}">
+		<f:facet name="header">
+    		Visualizador de relatorios
+		</f:facet>
+		<f:facet name="controls">
+        	<h:outputText value="X" style="cursor:pointer;font-style:bold" onclick="Richfaces.hideModalPanel('report')" />
+    	</f:facet>		 
+			<object data="#{facesContext.externalContext.request.contextPath}/recoverData?name=pessoas" width="100%" height="100%">
+			</object>
+		</rich:modalPanel>
+		</h:form>
+
+
+	</ui:define>
+	
+	</ui:composition>
+</body>
+</html>

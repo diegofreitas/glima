@@ -1,0 +1,76 @@
+
+<project>
+
+<filter filtersfile="build.properties"/>
+<property file="build.properties"/>
+
+<target name="prepare">
+  <echo message="Hello, world"/>
+  <mkdir dir="dist/sistemaweb/build/producao"/>
+  <mkdir dir="dist/sistemaweb/build/teste"/>
+  <mkdir dir="dist/sistemaweb/ant"/>
+  <mkdir dir="dist/sistemaweb/sql"/>
+  <mkdir dir="build/classes"/>
+  <mkdir dir="temp"/>
+</target>
+
+<target name="clean">
+  <!--<delete dir="build"/>-->
+  <delete dir="temp"/>
+  <delete dir="dist"/>
+</target>
+
+<!-- contruir distribuicao de producao -->
+<target name="build" depends="clean,prepare" >
+  <copydir src="etc/estrutura" dest="dist/sistemaweb" filtering="true"/>
+  <!--<javac srcdir="src" destdir="build/classes"/>-->
+  <copydir src="WebContent" dest="temp"/>
+  <delete file="temp/META-INF/context.xml"/>
+  <copy file="etc/context.xml.producao" tofile="temp/META-INF/context.xml" filtering="true"/>
+  <war destfile="dist/sistemaweb/build/producao/sistemaweb.war" webxml="temp/WEB-INF/web.xml">
+    <classes dir="build/classes"/>
+    <lib dir="temp/WEB-INF/lib"/>
+    <fileset dir="temp"/>
+  </war>
+  <delete dir="temp"/>
+  <copydir src="${ANT_HOME}" dest="dist/sistemaweb/ant" excludes="${ANT_HOME}/docs/**"/>
+</target>
+
+
+<!-- construir distribuicao de testes -->
+<target name="build-teste">
+  <delete file="temp/META-INF/context.xml"/>
+  <copy file="etc/context.xml.teste" tofile="temp/META-INF/context.xml" filtering="true"/>
+  <war destfile="dist/sistemaweb/build/teste/sistemawebTeste.war" webxml="temp/WEB-INF/web.xml">
+    <classes dir="build/classes"/>
+    <lib dir="temp/WEB-INF/lib"/>
+    <fileset dir="temp"/>
+  </war>
+</target>
+
+<!--executar testes -->
+
+</project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

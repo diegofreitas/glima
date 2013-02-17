@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:r="http://richfaces.org/rich"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:aj="http://richfaces.org/a4j">
+
+<body>
+<ui:composition template="facelets/template.xhtml">
+<ui:define name="body">
+		
+
+		<r:toggleControl for="panel"/>	
+	  <r:togglePanel id="panel" stateOrder="empty,first,second" switchType="client">
+
+        <f:facet name="first">
+
+            <h:panelGroup>
+                ...//Some Content
+
+            </h:panelGroup>
+
+        </f:facet>
+
+    <f:facet name="second">
+
+            <h:panelGroup>
+                ...//Some Content
+
+            </h:panelGroup>
+
+        </f:facet>
+
+        <f:facet name="empty">
+
+            <h:panelGroup>
+				zdfasdfasdfsa
+            </h:panelGroup>
+
+        </f:facet>
+
+    </r:togglePanel>
+    
+    
+
+	<h:form>
+ 	<h:outputText value="pessoas" />
+ 	<h:panelGrid id="campoPessoas">
+ 	<h:inputText size="20" readonly="true" id="pessoas" styleClass="rich-input" value="#{empty tabela.pessoas ? 'Nenhuma pessoa Selecionada' : tabela.totalPessoas} #{empty tabela.pessoas ? '' :' Pessoas Selecionadas'}" onclick="Richfaces.showModalPanel('painelBuscaPessoas')" >
+ 		<r:toolTip for="campoPessoas" followMouse="true" value="#{empty tabela.pessoas ? 'Clique aqui para selecionar as pessoas' : tabela.pessoas}"/>
+ 	</h:inputText>
+ 	</h:panelGrid>
+	</h:form>
+
+<r:modalPanel id="painelBuscaPessoas" autosized="true">
+	<f:facet name="header">
+    	Seleciona varios itens
+	</f:facet>
+	<f:facet name="controls">
+        	<h:outputText value="X" style="cursor:pointer;font-style:bold" onclick="Richfaces.hideModalPanel('painelBuscaPessoas')" />
+    </f:facet>
+		<aj:form>
+			<h:panelGrid columns="2">
+				<h:outputText value="Nome:" />
+				<h:inputText id="nomeExample" styleClass="rich-input" value="#{buscaPessoaPick.specification.nome}" />
+				<aj:commandButton reRender="dados" styleClass="rich-button" value="Pesquisar" actionListener="#{buscaPessoaPick.search}"/>
+				<f:verbatim/>
+			</h:panelGrid>
+			<br/>
+			<h:panelGrid  id="dados">
+				<r:pickList value="#{tabela.pessoas}" converter="object.converter">
+					<f:selectItems value="#{buscaPessoaPick.list}"/>
+				</r:pickList>
+			</h:panelGrid>
+			 <aj:commandButton reRender="campoPessoas" styleClass="rich-button" value="Comfirmar" oncomplete="Richfaces.hideModalPanel('painelBuscaPessoas')" />
+		</aj:form>		
+</r:modalPanel>	
+
+							
+
+<br/>
+
+
+
+
+
+
+
+<r:simpleTogglePanel label="Exemplo com tabela" switchType="client" opened="true">
+<h:form sytleClass="rich-container">
+<r:panel>
+<h:commandButton value="Novo" styleClass="rich-button" actionListener="#{tabela.PCFSupport.addChild}"/>
+
+<r:dataTable value="#{tabela.usuarios}" var="usuario" >
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="Acoes" />
+		</f:facet>
+		<h:commandLink value="excluir" actionListener="#{tabela.PCFSupport.removeChild}">
+			<f:param name="bean" value="#{usuario}" />
+		</h:commandLink>		
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="Nome" />
+		</f:facet>
+		<h:inputText styleClass="rich-input" value="#{usuario.nome}"/>	
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="Senha" />
+		</f:facet>
+		<h:inputText styleClass="rich-input" value="#{usuario.senha}" />	
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header">
+			<h:outputText value="Permissoes" />
+		</f:facet>
+		<h:inputText styleClass="rich-input" value="#{usuario.permissoes}"/>		
+	</h:column>
+</r:dataTable>
+</r:panel>
+</h:form>
+</r:simpleTogglePanel>
+
+
+<r:simpleTogglePanel label="Exemplo com tabela" switchType="client" opened="false">
+
+<h:form sytleClass="rich-container">
+<r:panel>
+<h:commandButton value="Novo" styleClass="rich-button" actionListener="#{tabela.PCFSupport.addChild}"/>
+
+<r:dataTable value="#{tabela.usuarios}" var="usuario" >
+
+	<f:facet name="header">
+		Itens da tabela
+	</f:facet>
+	<h:column>
+		<r:simpleTogglePanel opened="false" label="#{usuario.nome} toString" switchType="client">
+			<f:facet name="header">
+
+				<h:commandLink value="excluir" actionListener="#{tabela.PCFSupport.removeChild}">
+					<f:param id="bean" name="bean" value="#{usuario}" />
+				</h:commandLink>	
+			</f:facet>
+			
+				
+			<h:panelGrid column="2">
+				<h:outputText value="Nome" />
+				<h:inputText styleClass="rich-input" value="#{usuario.nome}"/>	
+
+				<h:outputText value="Senha" />
+				<h:inputText styleClass="rich-input" value="#{usuario.senha}" />	
+
+				<h:outputText value="Permissoes" />
+				<h:inputText styleClass="rich-input" value="#{usuario.permissoes}"/>	
+			</h:panelGrid>
+		</r:simpleTogglePanel>	
+	</h:column>
+</r:dataTable>
+</r:panel>
+</h:form>
+</r:simpleTogglePanel>
+
+
+</ui:define>
+</ui:composition>
+</body>
+</html>

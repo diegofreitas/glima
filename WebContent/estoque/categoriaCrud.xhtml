@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+<head>
+<style type="text/css">
+	@IMPORT url("#{facesContext.externalContext.request.contextPath}/css/style.css");
+</style>
+
+</head>
+<body>
+<ui:composition>
+
+
+	<!--####################################################################################################################
+			########################################################################################################################
+			#########################################################################################################################  -->
+
+
+	<t:saveState value="#{categoriaCrud}" />
+	<ui:param name="defaultBean" value="#{categoriaCrud}" />
+	<ui:param name="naming" value="categoria" />
+	
+	
+	
+	<!--####################################################################################################################  -->
+<f:loadBundle basename="message" var="m" />
+	
+	
+	<a4j:form id="#{naming}MainForm">
+	 	
+		<!--### Mensagens -->
+		<ui:include src="../facelets/messages.xhtml"/>
+		<!--### -->
+		
+		<!--### bloco de pesquisa -->
+		<rich:panel id="#{naming}SearchlistBlock" rendered="#{defaultBean.pesquisarState}" styleClass="mainForm">
+			<f:facet name="header">
+				#{m.tituloListagem} #{naming}
+			 </f:facet>
+			
+			<!--### Campos de pesquisa --> 
+			<h:panelGrid columns="2" columnClasses="label-column ,field-column">
+				<h:outputLabel value="#{m.categoriaDescricao}" />
+				<h:column>
+					<h:inputText styleClass="rich-input-text" value="#{defaultBean.specification.descricao}" size="30"/>					
+				</h:column>
+			</h:panelGrid>
+			<br/>
+			<h:panelGrid columns="2">
+					<a4j:commandLink styleClass="rich-button"
+						action="#{defaultBean.pesquisar}" reRender="#{naming}MainForm" >											
+						<h:outputLabel  value="#{m.pesquisar}" styleClass="btnPesquisar"/>
+					</a4j:commandLink>
+					<a4j:commandLink styleClass="rich-button"
+						action="#{defaultBean.prepareAdicionar}" immediate="true"
+						reRender="#{naming}MainForm" >
+						<h:outputLabel  value="#{m.adicionar}" styleClass="btnAdicionar"/>
+						</a4j:commandLink>
+			</h:panelGrid>
+			<br/>
+			
+			<!--### -->
+			<br/>
+			<!--### Tabela para os resultados -->
+			<rich:dataTable width="483" id="userList" rows="10" rowClasses="table-row1,table-row2" value="#{defaultBean.entities}" var="row">
+				<!--### Cabecalho-->
+				<f:facet name="header">
+					<rich:columnGroup>
+						<h:column>
+							#{m.categoriaDescricao}
+						</h:column>
+						
+						<h:column>
+							#{m.acoesListagem}
+						</h:column>
+					</rich:columnGroup>
+				</f:facet>
+				<!--### -->
+				
+				<!--### Linhas com os dados -->
+				<h:column>
+					<h:outputText value="#{row.descricao}" />
+				</h:column>
+				
+			<!--###################################################################################################################  -->
+				<!--### -->
+				
+				<!--### Coluna com os comandos-->
+				<h:column>
+					<center>
+					<a4j:commandLink action="#{defaultBean.prepareEditar}" immediate="true"
+						rendered="#{relation==null}" reRender="#{naming}MainForm">
+						<f:setPropertyActionListener value="#{row}"
+							target="#{defaultBean.entity}" />
+						<h:graphicImage value="/css/img/16/edit.png"/>
+					</a4j:commandLink> 
+					<span class="spacer">
+					</span>  
+					<a4j:commandLink action="#{defaultBean.excluir}" immediate="true"
+						rendered="#{relation==null}" reRender="#{naming}MainForm">
+						<f:setPropertyActionListener value="#{row}"
+							target="#{defaultBean.entity}" />
+						<h:graphicImage value="/css/img/16/delete.png"/>
+					</a4j:commandLink> 
+					<span class="spacer">
+					</span> 
+					<a4j:commandLink immediate="true"
+								rendered="#{relation!=null}"
+								oncomplete="Richfaces.hideModalPanel('#{naming}ModalPanel')">
+								<f:setPropertyActionListener value="#{row}" target="#{relation.entity.categoria}" />
+								<h:graphicImage value="/css/img/16/check.png"/>
+					</a4j:commandLink> 
+					
+					</center>
+				</h:column>
+				<!--### -->
+				<f:facet name="footer">
+					<rich:datascroller/>
+				</f:facet>
+			</rich:dataTable>
+			<!--### -->
+			
+		</rich:panel>
+		<!--### -->
+		
+		<!--### Bloco de Edição -->
+		<rich:panel id="#{naming}AddUpdateBlock" rendered="#{defaultBean.adicionarState or defaultBean.editarState}" styleClass="mainForm">
+			<f:facet name="header">
+				#{m.tituloCadastro } #{naming}
+			</f:facet>
+			
+			<!--### Inicio da declaração dos campos do formulário -->
+			<h:panelGrid columns="2" id="panel2" binding="#{defaultBean.panelForm}" columnClasses="label-column,field-column">
+			
+				<h:outputLabel value="#{m.categoriaDescricao}" />
+				<h:column>
+					<h:inputText styleClass="rich-input-text" value="#{defaultBean.entity.descricao}" size="30"
+						required="true" id="descricao" />
+					<br />
+					<h:message for="descricao" styleClass="error" />
+				</h:column>
+				
+			</h:panelGrid>
+			<!--### -->
+			<br/>
+			<!--### Declaração do comandos da tela de adicionar e editar objeto -->
+			<h:panelGrid id="commandos" columns="4">
+				<a4j:commandLink styleClass="rich-button"  id="salvar" action="#{defaultBean.saveAndReturn}" 
+					rendered="#{relation==null}" reRender="#{naming}MainForm" >
+					<h:outputLabel  value="#{m.salvar}" styleClass="btnSalvar"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="salvarManter" action="#{defaultBean.saveAndKeep}" 
+					rendered="#{relation==null}" reRender="#{naming}MainForm" >
+					<h:outputLabel  value="#{m.salvarManter}" styleClass="btnSalvarManter"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="salvarAdicionar" action="#{defaultBean.saveAndAdd}" 
+					rendered="#{relation==null}" reRender="#{naming}MainForm" >
+					<h:outputLabel  value="#{m.salvarAdicionar}" styleClass="btnSalvarAdicionar"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="salvarSelecionar"
+					oncomplete="if ('#{facesContext.maximumSeverity.ordinal}' == '0'){Richfaces.hideModalPanel('#{naming}ModalPanel');}"
+					action="#{defaultBean.saveAndSelect}" rendered="#{relation!=null}" reRender="#{naming}MainForm">
+					<f:setPropertyActionListener value="#{defaultBean.entity}" target="#{relation.entity.categoria}" />
+					<h:outputLabel  value="#{m.salvarSelecionar}" styleClass="btnSalvaSeleciona"/>
+				</a4j:commandLink>
+				<a4j:commandLink styleClass="rich-button"  id="voltar" action="#{defaultBean.voltar}" immediate="true" reRender="#{naming}MainForm">
+					<h:outputLabel  value="#{m.voltar}" styleClass="btnVoltar"/>
+				</a4j:commandLink>
+				
+			</h:panelGrid>
+			<br/>
+			<!--### -->
+			
+		</rich:panel>
+		
+	</a4j:form>
+</ui:composition>
+
+</body>
+</html>

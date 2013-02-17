@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich">
+<body>
+<ui:composition>
+	<rich:panelMenu>
+		<rich:panelMenuGroup label="#{m.menuEstoque}" iconExpanded="/css/img/32/cubes.png" iconCollapsed="/css/img/32/cubes.png">
+			<rich:panelMenuItem>
+				<h:outputLink value="#{facesContext.externalContext.request.contextPath}/estoque/categoriaMain.jsf">
+					#{m.menuCategoria}
+				</h:outputLink>
+			</rich:panelMenuItem>
+			<rich:panelMenuItem>
+				<h:outputLink value="#{facesContext.externalContext.request.contextPath}/estoque/fornecedorMain.jsf">
+					#{m.menuFornecedor}
+				</h:outputLink>
+			</rich:panelMenuItem>
+			<rich:panelMenuItem>
+				<h:outputLink value="#{facesContext.externalContext.request.contextPath}/estoque/produtoMain.jsf">
+					#{m.menuProduto}
+				</h:outputLink>
+			</rich:panelMenuItem>
+			<rich:panelMenuItem>
+				<h:outputLink value="#{facesContext.externalContext.request.contextPath}/estoque/entradaMain.jsf">
+					#{m.menuEntrada}
+				</h:outputLink>
+			</rich:panelMenuItem>
+		</rich:panelMenuGroup>
+	</rich:panelMenu>
+</ui:composition>
+</body>
+</html>

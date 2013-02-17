@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:a4j="http://richfaces.org/a4j"
+		xmlns:rich="http://richfaces.org/rich"
+		xmlns:t="http://myfaces.apache.org/tomahawk">
+	<head>
+		<style type="text/css">
+	    	@IMPORT url("#{facesContext.externalContext.request.contextPath}/css/style.css");
+	    </style>
+	</head>
+	<body>
+	<ui:composition>
+	<t:saveState value="#{profissaoCrudBean}"/>
+	<ui:param name="defaultBean" value="#{profissaoCrudBean}" />
+	<ui:param name="naming" value="profissao" />
+	
+		<f:loadBundle basename="message" var="m" />
+		 	 
+		
+		
+			
+			<a4j:form id="mainForm#{naming}">
+				<!--### Mensagens -->
+		<a4j:outputPanel ajaxRendered="true">
+			<h:messages id="pessoaMessage" layout="table" tooltip="true"
+				showdetail="true" showsummary="true" errorClass="error"
+				infoClass="info"
+				warnClass="warn"
+				rendered="#{facesContext.maximumSeverity.ordinal != 2}" />
+		</a4j:outputPanel>
+		<!--### -->
+				<!-- bloco de pesquisa -->
+				<rich:panel id="searchlistBlock#{naming}" rendered="#{defaultBean.pesquisarState}">
+					<f:facet name="header">
+						Pesquisar
+			        </f:facet>
+				<h:panelGrid columns="1">
+					<h:column>
+						<h:outputText value="descrição" />
+						<br/>
+						<h:inputText value="#{profissaoCrudBean.descricao}" size="30" />
+					</h:column>
+					<h:column>
+						<a4j:commandButton value="Pesquisar" action="#{profissaoCrudBean.pesquisar}" reRender="mainForm#{naming}"/>
+						<a4j:commandButton value="Adicionar" action="#{profissaoCrudBean.prepareAdicionar}" immediate="true" reRender="mainForm#{naming}"/>
+					</h:column>
+				</h:panelGrid>
+				
+				<rich:spacer width="1" height="5" />
+				<rich:datascroller align="left" for="userList" maxPages="10" />
+				<rich:spacer height="30" />
+		
+				<rich:dataTable width="483" id="userList" rows="10" columnClasses="col" value="#{profissaoCrudBean.profissaos}" var="row">
+					<f:facet name="header">
+						<rich:columnGroup>
+							<h:column>
+								<h:outputText styleClass="headerText" value="descrição" />
+							</h:column>
+							<h:column>
+								<h:outputText styleClass="headerText" value="salário base" />
+							</h:column>
+							<h:column>
+							</h:column>
+						</rich:columnGroup>
+					</f:facet>
+					<h:column>
+						<h:outputText value="#{row.descricao}" />
+					</h:column>
+					<h:column>
+						<h:outputText value="#{row.salarioBase}" />
+					</h:column>
+		
+					<h:column>
+						<span>
+							<a4j:commandLink reRender="mainForm#{naming}" value="editar" action="#{profissaoCrudBean.prepareEditar}" immediate="true" rendered="#{relation==null}">
+								<f:setPropertyActionListener value="#{row}" target="#{profissaoCrudBean.profissao}"/>
+							</a4j:commandLink>
+						</span>
+						<span>
+							<a4j:commandLink reRender="mainForm#{naming}" value="excluir" action="#{profissaoCrudBean.excluir}" immediate="true" rendered="#{relation==null}">
+								<f:setPropertyActionListener value="#{row}" target="#{profissaoCrudBean.profissao}"/>
+							</a4j:commandLink>
+						</span>
+						<span>
+							<a4j:commandLink reRender="mainForm#{naming}" value="selecionar" rendered="#{relation!=null}"
+								oncomplete="Richfaces.hideModalPanel('profissoes')">
+								<f:setPropertyActionListener value="#{row}" target="#{relation.profissao}"/>
+							</a4j:commandLink>
+						</span>
+					</h:column>
+				</rich:dataTable>
+		
+				</rich:panel>
+				<!-- bloco de edição -->
+				<rich:panel id="addUpdateBlock#{naming}" rendered="#{defaultBean.adicionarState or defaultBean.editarState}">
+					
+					<f:facet name="header">
+						Dados da Profissao
+			        </f:facet>
+					<h:panelGrid columns="2" id="panel2" binding="#{profissaoCrudBean.panelForm}" columnClasses="odd-row,even-row">
+		
+						<h:outputLabel value="descrição"/>
+						<h:column>
+							<h:inputText value="#{profissaoCrudBean.profissao.descricao}" size="30" required="true" id="descricao"/>
+							<br/>
+							<h:message for="descricao" styleClass="error"/>
+						</h:column>
+			
+						<h:outputLabel value="salário base"/>
+						<h:column>
+							<h:inputText value="#{profissaoCrudBean.profissao.salarioBase}" size="8" redisplay="true" id="salarioBase"/>
+							<br/>
+							<h:message for="salarioBase" styleClass="error"/>
+						</h:column>
+						
+						
+			
+					</h:panelGrid>
+					<a4j:commandButton reRender="mainForm#{naming}" value="Salvar" id="salvar" action="#{profissaoCrudBean.saveAndReturn}" rendered="#{relation==null}"/>
+					<a4j:commandButton reRender="mainForm#{naming}" value="Salvar e Manter" id="salvarManter" action="#{profissaoCrudBean.saveAndKeep}" rendered="#{relation==null}"/>
+					<a4j:commandButton reRender="mainForm#{naming}" value="Salvar e Selecionar" id="salvarSelecionar" oncomplete="if ('#{facesContext.maximumSeverity.ordinal}' == '0'){Richfaces.hideModalPanel('profissoes');}"
+						action="#{profissaoCrudBean.saveAndSelect}" rendered="#{relation!=null}" >
+						<f:setPropertyActionListener value="#{defaultBean.profissao}" target="#{relation.profissao}"/>
+					</a4j:commandButton>
+					<a4j:commandButton reRender="mainForm#{naming}" value="Voltar" id="voltar" action="#{defaultBean.voltar}" immediate="true"/>
+					
+				</rich:panel>
+			</a4j:form>
+
+</ui:composition>
+</body>
+</html>
